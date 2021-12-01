@@ -1,7 +1,8 @@
 #lang racket/base
 
-(require racket/sequence)
+(require algorithms)
 (require racket/list)
+(require racket/sequence)
 
 (define (read-numbers filename)
   (with-input-from-file filename
@@ -35,6 +36,9 @@
 (display (count-decreases (input)))
 (newline)
 
-(display "Task 2: ")
+(display "Task 2v1: ")
 (display (count-decreases (sliding-window-3-sum (input))))
 (newline)
+
+(display "Task 2v2: ")
+(display (count-decreases (map sum (sliding (input) 3 1))))
