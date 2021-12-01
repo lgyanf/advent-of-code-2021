@@ -9,21 +9,23 @@
       (map string->number (sequence->list (in-lines))))))
 
 (define (count-decreases depths)
-  (define (iter depths last-depth acc)
-    (if (null? depths)
-        acc
-        (let ((depth (car depths)))
-          (iter (cdr depths) depth (if (> depth last-depth) (+ acc 1) acc)))))
-  (if (null? depths) 0 (iter (cdr depths) (car depths) 0)))
-
-(define nil '())
+  (car 
+   (sequence-fold
+    (lambda (acc current)
+      (let ((count (car acc))
+            (prev (cdr acc)))
+        (if (> current prev)
+            (cons (+ count 1) current)
+            (cons count current))))
+    (cons 0 (sequence-ref depths 0))
+    (sequence-tail depths 1))))
 
 (define (sliding-window-3-sum nums)
   (let ((result (make-vector (- (length nums) 2))))
     (define (iter nums a b c position)
       (vector-set! result position (+ a b c))
       (if (null? nums)
-        (vector->list result)
+        result
         (iter (cdr nums) b c (car nums) (+ position 1))))
     (iter (cdddr nums) (car nums) (cadr nums) (caddr nums) 0)))
 
